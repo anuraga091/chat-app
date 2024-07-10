@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchChats, setActiveChat, markAsRead, updateChatAsRead } from '../redux/chatSlice';
+import { fetchChats, setActiveChat, markAsRead } from '../redux/chatSlice';
 import ChatItem from './ChatItem';
 
 const ChatList = ({ tab }) => {
@@ -24,7 +24,6 @@ const ChatList = ({ tab }) => {
 
   const handleChatClick = (chatId) => {
     dispatch(setActiveChat(chatId));
-    dispatch(updateChatAsRead(chatId));  
     dispatch(markAsRead(chatId));     
   };
 

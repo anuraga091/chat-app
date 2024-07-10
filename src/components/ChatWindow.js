@@ -1,28 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMessages, clearMessages, markAsRead } from '../redux/chatSlice';
+import { fetchMessages, clearMessages, markAsRead, addMessage } from '../redux/chatSlice';
 import { io } from 'socket.io-client';
+import axios from 'axios';
 
 const ChatWindow = () => {
   const dispatch = useDispatch();
   const activeChat = useSelector((state) => state.chat.activeChat);
   const messages = useSelector((state) => state.chat.messages);
   const hasMoreMessages = useSelector((state) => state.chat.hasMoreMessages);
+  const messageCursor = useSelector((state) => state.chat.messageCursor);
   const [message, setMessage] = useState('');
   const socket = useRef(null);
   const chatWindowRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [cursor, setCursor] = useState({ last_message_id: null, page_size: 10 });
+
+  const userId = 1;  
 
   useEffect(() => {
     if (activeChat) {
-      dispatch(fetchMessages({ chatId: activeChat, cursor }));
+      dispatch(fetchMessages({ chatId: activeChat, cursor: { last_message_id: messageCursor, page_size: 10 } }));
       dispatch(markAsRead(activeChat));
       socket.current = io('http://localhost:3001');
       socket.current.emit('join', { chatId: activeChat });
 
       socket.current.on('message', (newMessage) => {
-        dispatch(fetchMessages({ chatId: activeChat, cursor }));
+        if (newMessage.chatId === activeChat) {
+          dispatch(addMessage(newMessage));
+        }
       });
 
       return () => {
@@ -35,7 +40,7 @@ const ChatWindow = () => {
   const fetchMoreMessages = async () => {
     if (loading || !hasMoreMessages) return;
     setLoading(true);
-    await dispatch(fetchMessages({ chatId: activeChat, cursor }));
+    await dispatch(fetchMessages({ chatId: activeChat, cursor: { last_message_id: messageCursor, page_size: 10 } }));
     setLoading(false);
   };
 
@@ -45,11 +50,16 @@ const ChatWindow = () => {
     }
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (message.trim() === '') return;
-    const newMessage = { chatId: activeChat, content: message, created_at: new Date().toISOString() };
+    const newMessage = { chatId: activeChat, content: message, created_at: new Date().toISOString(), sender_id: userId };
     socket.current.emit('message', newMessage);
     setMessage('');
+    try {
+      await axios.post('http://localhost:3001/add-message', newMessage);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   return (
@@ -59,8 +69,8 @@ const ChatWindow = () => {
       </div>
       <div className="flex-1 overflow-y-auto p-4" ref={chatWindowRef} onScroll={handleScroll}>
         {messages.map((msg, index) => (
-          <div key={`${msg.id}-${index}`} className="my-2">
-            <div className={`p-2 rounded ${msg.sender === 'me' ? 'bg-blue-100 self-end' : 'bg-gray-100'}`}>
+          <div key={`${msg.id}-${index}`} className={`my-2 flex ${msg.sender_id === userId ? 'justify-end' : 'justify-start'}`}>
+            <div className={`p-2 rounded ${msg.sender_id === userId ? 'bg-blue-100' : 'bg-gray-100'}`}>
               {msg.content}
             </div>
             <div className="text-xs text-gray-500">{new Date(msg.created_at).toLocaleString()}</div>
