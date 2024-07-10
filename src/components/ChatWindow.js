@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMessages, clearMessages, markAsRead, addMessage } from '../redux/chatSlice';
 import { io } from 'socket.io-client';
-import axios from 'axios';
 
 const ChatWindow = () => {
   const dispatch = useDispatch();
@@ -15,11 +14,11 @@ const ChatWindow = () => {
   const chatWindowRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
-  const userId = 1;  
+  const userId = 1;  // Assuming user_id: 1 is the logged-in user
 
   useEffect(() => {
     if (activeChat) {
-      dispatch(fetchMessages({ chatId: activeChat, cursor: { last_message_id: messageCursor, page_size: 10 } }));
+      fetchInitialMessages();
       dispatch(markAsRead(activeChat));
       socket.current = io('http://localhost:3001');
       socket.current.emit('join', { chatId: activeChat });
@@ -37,11 +36,24 @@ const ChatWindow = () => {
     }
   }, [activeChat, dispatch]);
 
+  const fetchInitialMessages = async () => {
+    if (!loading) {
+      setLoading(true);
+      await dispatch(fetchMessages({ chatId: activeChat, cursor: { last_message_id: null, page_size: 10 } }));
+      setLoading(false);
+      if (chatWindowRef.current) {
+        chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+      }
+    }
+  };
+
   const fetchMoreMessages = async () => {
     if (loading || !hasMoreMessages) return;
     setLoading(true);
+    const prevHeight = chatWindowRef.current.scrollHeight;
     await dispatch(fetchMessages({ chatId: activeChat, cursor: { last_message_id: messageCursor, page_size: 10 } }));
     setLoading(false);
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight - prevHeight;
   };
 
   const handleScroll = (e) => {
@@ -50,17 +62,19 @@ const ChatWindow = () => {
     }
   };
 
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (message.trim() === '') return;
     const newMessage = { chatId: activeChat, content: message, created_at: new Date().toISOString(), sender_id: userId };
     socket.current.emit('message', newMessage);
     setMessage('');
-    try {
-      await axios.post('http://localhost:3001/add-message', newMessage);
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
+    dispatch(addMessage(newMessage)); // Add the message immediately to the UI
   };
+
+  useEffect(() => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
     <div className="flex flex-col h-full">

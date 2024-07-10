@@ -91,15 +91,15 @@ const chatSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
-        const newMessages = action.payload.reverse();
-        state.messages = [...new Map([...newMessages, ...state.messages].map(item => [item['id'], item])).values()];
+        const newMessages = action.payload;
+        state.messages = [...newMessages, ...state.messages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
         state.hasMoreMessages = newMessages.length > 0;
         if (newMessages.length > 0) {
           state.messageCursor = newMessages[0].id;  // Update cursor with the first message's ID
         }
         state.loading = false;
       })
-      .addCase(fetchMessages.rejected, (state) => {
+            .addCase(fetchMessages.rejected, (state) => {
         state.loading = false;
       })
       .addCase(markAsRead.fulfilled, (state, action) => {
@@ -117,3 +117,4 @@ const chatSlice = createSlice({
 export const { setActiveChat, clearMessages, addMessage } = chatSlice.actions;
 
 export default chatSlice.reducer;
+
