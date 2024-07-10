@@ -5,7 +5,7 @@ import axios from 'axios';
 export const fetchChats = createAsyncThunk('chat/fetchChats', async ({ tab, pageDetails }) => {
   const response = await axios.post('http://localhost:3001/fetch/chats', {
     applied_filters: { read: tab === 'Unread' ? false : undefined },
-    user_id: 1,  
+    user_id: 1, 
     page_details: pageDetails
   });
 
@@ -20,7 +20,7 @@ export const fetchChats = createAsyncThunk('chat/fetchChats', async ({ tab, page
   const userMap = new Map();
   for (const chat of filteredChats) {
     if (!userMap.has(chat.sender_details.user_id)) {
-      userMap.set(chat.sender_details.user_id, true); 
+      userMap.set(chat.sender_details.user_id, true);
       uniqueChats.push(chat);
     }
   }
@@ -62,6 +62,15 @@ const chatSlice = createSlice({
       state.messages = [];
       state.hasMoreMessages = true;
     },
+    updateChatAsRead: (state, action) => {
+      const chatId = action.payload;
+      state.chats = state.chats.map(chat => {
+        if (chat.chat_id === chatId) {
+          return { ...chat, last_message: { ...chat.last_message, status: 'READ' } };
+        }
+        return chat;
+      });
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -91,6 +100,6 @@ const chatSlice = createSlice({
   },
 });
 
-export const { setActiveChat, clearMessages } = chatSlice.actions;
+export const { setActiveChat, clearMessages, updateChatAsRead } = chatSlice.actions;
 
 export default chatSlice.reducer;

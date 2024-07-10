@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchChats, setActiveChat } from '../redux/chatSlice';
+import { fetchChats, setActiveChat, markAsRead, updateChatAsRead } from '../redux/chatSlice';
 import ChatItem from './ChatItem';
 
 const ChatList = ({ tab }) => {
@@ -22,10 +22,16 @@ const ChatList = ({ tab }) => {
     }
   };
 
+  const handleChatClick = (chatId) => {
+    dispatch(setActiveChat(chatId));
+    dispatch(updateChatAsRead(chatId));  
+    dispatch(markAsRead(chatId));     
+  };
+
   return (
     <div className="chat-list overflow-y-auto h-full" onScroll={handleScroll}>
       {chats.map((chat) => (
-        <ChatItem key={`${chat.chat_id}-${chat.sender_details.user_id}`} chat={chat} onClick={() => dispatch(setActiveChat(chat.chat_id))} />
+        <ChatItem key={`${chat.chat_id}-${chat.sender_details.user_id}`} chat={chat} onClick={() => handleChatClick(chat.chat_id)} />
       ))}
       {loading && <div>Loading...</div>}
     </div>
