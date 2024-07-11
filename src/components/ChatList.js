@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchChats, setActiveChat, markAsRead } from '../redux/chatSlice';
+import { fetchChats, markAsRead } from '../redux/chatSlice';
 import ChatItem from './ChatItem';
 
 const ChatList = ({ tab, activeChat, setActiveChat }) => {
