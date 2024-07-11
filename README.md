@@ -5,6 +5,7 @@ A basic whatspp like chat application for frontend for sending, recieving messag
 1. Clone this repo using `git clone`
 2. Go inside the folder and do `npm install` to install the dependencies
 3. Once done with installing do `npm start` to start the server
+4. simultaneously start the backend server with `npm start`, both server should be start to properly use this project
 
 ## Functionality
 1. Redux to handle complex states and maintaining state like 
@@ -26,8 +27,8 @@ A basic whatspp like chat application for frontend for sending, recieving messag
 
 
 ## Decisions
-1. Used REST APIs to implement these functionalities while best case is combination of REST APIs and Websocket to efficiently uses
-2. Used Combination of React Hooks and Redux for storing chats, and handling state for User Information(list of user with last messages) and messages with useState, useEffect, useRef, redux-toolkit functionalities
+1. Used `REST APIs` to implement these functionalities while best case is combination of REST APIs and Websocket to efficiently uses
+2. Used Combination of `React Hooks` and `Redux` for storing chats, and handling state for User Information(list of user with last messages) and messages with `useState()`, `useEffect()`, `useRef()`, redux-toolkit functionalities
 3. Used Polling to send and recieve messages with Reverse OnScroll Pagination and update the state with React Hooks with minimal Re-render
 4. Used React-router for routing purposes with default route when user has not logged in as `/` and `/chats` when loggedin 
 5. Used tailwind css for styling purpose
