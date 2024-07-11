@@ -1,70 +1,40 @@
-# Getting Started with Create React App
+## About
+A basic whatspp like chat application for frontend for sending, recieving messages from various user with simple google auth
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## How to setup
+1. Clone this repo using `git clone`
+2. Go inside the folder and do `npm install` to install the dependencies
+3. Once done with installing do `npm start` to start the server
 
-## Available Scripts
+## Functionality
+1. Redux to handle complex states and maintaining state like 
+    1. Read, 
+    2. Last messages
+    3. Fetch chats
+    4. Store chats with last message
 
-In the project directory, you can run:
+2. Send, Update and Get all the previous Messages
+3. Filter chats based on Read and Unread last messages
+4. Get All the user with you are talking and show it in UI
+5. Pagination for List of users
+6. Reverse pagination for messages
+7. Social Authentication with Google Auth
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Decisions
+1. Used REST APIs to implement these functionalities while best case is combination of REST APIs and Websocket to efficiently uses
+2. Used Combination of React Hooks and Redux for storing chats, and handling state for User Information(list of user with last messages) and messages with useState, useEffect, useRef, redux-toolkit functionalities
+3. Used Polling to send and recieve messages with Reverse OnScroll Pagination and update the state with React Hooks with minimal Re-render
+4. Used React-router for routing purposes with default route when user has not logged in as `/` and `/chats` when loggedin 
+5. Used tailwind css for styling purpose
+6. Maintained minimilistic design with focus on user experience.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Improvements
+1. Efficiently use Polling and Websocket for better user experience
+2. Design Improvements
+3. Efficiently setup a scalable backend for better functionality
+4. Efficiently use Pagination with all edge cases
+5. Use of hooks like `useMemo()`, `React.momo()`, `useCallback()` to reduce the re-renders
+6. Efficient uses of Redux functionalities and remove redux usage if not required
+7. key based keyboard navigation ex: `up and down key` for going up and down in chat-user list and messages, `enter key` for sending messages
+8. Others
