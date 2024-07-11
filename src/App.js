@@ -10,6 +10,7 @@ import { auth } from './firebase';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('All');
+  const [activeChat, setActiveChat] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -35,10 +36,16 @@ const App = () => {
                   <div className="w-1/3 border-r overflow-y-auto">
                     <button onClick={() => auth.signOut()} className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700 mb-4">Sign Out</button>
                     <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-                    <ChatList tab={activeTab} />
+                    <ChatList tab={activeTab} setActiveChat={setActiveChat} />
                   </div>
                   <div className="w-2/3">
-                    <ChatWindow />
+                    {activeChat ? (
+                      <ChatWindow activeChat={activeChat} userId={user.uid} onClose={() => setActiveChat(null)} />
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <p>Select a chat to start messaging</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
