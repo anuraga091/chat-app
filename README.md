@@ -19,6 +19,10 @@ A basic whatspp like chat application for frontend for sending, recieving messag
 5. Pagination for List of users
 6. Reverse pagination for messages
 7. Social Authentication with Google Auth
+8. Key(Keyboard) based navigation - `keyUP` and `key down` for going up and down in the chat and setting focus, `enter key` outside chat window to open the chat of the user, `enter key` inside chat window to send messages.
+9. Count of No. of Unread messages
+10. Mark as read option without actually reading the chat
+
 
 
 ## Decisions
@@ -36,5 +40,4 @@ A basic whatspp like chat application for frontend for sending, recieving messag
 4. Efficiently use Pagination with all edge cases
 5. Use of hooks like `useMemo()`, `React.momo()`, `useCallback()` to reduce the re-renders
 6. Efficient uses of Redux functionalities and remove redux usage if not required
-7. key based keyboard navigation ex: `up and down key` for going up and down in chat-user list and messages, `enter key` for sending messages
-8. Others
+7. Others

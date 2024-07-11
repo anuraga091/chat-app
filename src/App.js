@@ -36,7 +36,7 @@ const App = () => {
                   <div className="w-1/3 border-r overflow-y-auto">
                     <button onClick={() => auth.signOut()} className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700 mb-4">Sign Out</button>
                     <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-                    <ChatList tab={activeTab} setActiveChat={setActiveChat} />
+                    <ChatList tab={activeTab} activeChat={activeChat} setActiveChat={setActiveChat} />
                   </div>
                   <div className="w-2/3">
                     {activeChat ? (

@@ -109,6 +109,12 @@ const ChatWindow = ({ activeChat, userId, onClose }) => {
     scrollToBottom();
   }, [messages]);
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
   const sortMessages = (messages) => {
     return messages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
   };
@@ -135,6 +141,7 @@ const ChatWindow = ({ activeChat, userId, onClose }) => {
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type a message"
           className="w-full p-2 border rounded mb-2"
+          onKeyDown={handleKeyDown}
         />
         <button onClick={sendMessage} className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
           Send
